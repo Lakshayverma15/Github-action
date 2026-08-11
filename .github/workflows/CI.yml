@@ -22,6 +22,6 @@ jobs:
            uses: docker/build-push-action@v7
            with:
              push: true
-             tag: ${{ vars.DOCKER_USERNAME }}/app:latest
+             tag: ${{ vars.DOCKER_USERNAME }}/app-master:latest
              
   
