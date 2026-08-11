@@ -1,9 +1,8 @@
 #goal - i have to build test the code for backend, frontend, then push the image to docker hub
 name: CI
 
-on:
-  push:
-    branches: [master]
+on: 
+  workflow_dispatch: 
    
 jobs:
     build_and_push:
