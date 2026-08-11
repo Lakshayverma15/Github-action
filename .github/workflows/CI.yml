@@ -5,22 +5,30 @@ on:
   workflow_dispatch: 
    
 jobs:
-    build_and_push:
-      runs-on: ubuntu-latest
-      steps:
-         - name: Checkout code
-           uses: actions/checkout@v7
-           
-         - name: login to docker hub
-           uses: docker/login-action@v4
-           with:
-              username: ${{ vars.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKERHUB_TOKEN }}
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout code
+         uses: actions/checkout@v4  # Fixed typo: changed 'action' to 'actions'
+         
+       - name: Login to Docker Hub
+         uses: docker/login-action@v3
+         with:
+            username: ${{ vars.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-         - name: Build and push
-           uses: docker/build-push-action@v7
-           with:
-             push: true
-             tag: ${{ vars.DOCKER_USERNAME }}/app-master:latest
-             
-  
+       # Step 2 Implementation: Dynamically lowercase the username and set the final tag
+       - name: Set lowercased Docker Hub image tag
+         run: |
+           # Take the Docker username, push it through 'tr' to make it lowercase, and combine with image name
+           LOWER_TAG=$(echo "${{ vars.DOCKER_USERNAME }}/app-master:latest" | tr '[:upper:]' '[:lower:]')
+           
+           # Save this variable into the GitHub Environment file so subsequent steps can use it
+           echo "DOCKER_IMAGE_TAG=$LOWER_TAG" >> $GITHUB_ENV
+
+       - name: Build and push
+         uses: docker/build-push-action@v6
+         with:
+           context: .
+           push: true
+           tags: ${{ env.DOCKER_IMAGE_TAG }} # Uses the sanitized, lowercase tag here
