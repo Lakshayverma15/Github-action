@@ -1,4 +1,4 @@
-# Take input from the users
+# Take input from the user about thr year
 year = int(input("Enter a year: "))
 
 # A year is a leap year if it is divisible by 4 but not by 100,
