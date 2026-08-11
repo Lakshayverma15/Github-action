@@ -16,10 +16,7 @@ jobs:
           - name: Checkout/clone the code
             uses: actions/checkout@v7
 
-          - name: set up python
-            uses: action/setup-python@v5
-            with:
-              python-version: '3.14'
+          
             #this step will install the lingting tool
           - name: install linter
             run: pip install ruff
